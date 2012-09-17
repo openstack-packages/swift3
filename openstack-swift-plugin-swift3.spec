@@ -1,13 +1,15 @@
+%global git_rev f216f1b4
+
 Name:		openstack-swift-plugin-swift3
 Version:	1.0.0
-Release:	0.20120613git%{?dist}
+Release:	0.20120711git%{?dist}
 Summary:	The swift3 plugin for Openstack Swift
 
 License:	ASL 2.0
 URL:		https://github.com/fujita/swift3
-# git archive --format=tar --prefix=swift3-1.0.0-5c74ba04/ 5c74ba04 | \
-#   xz - > ../swift3-1.0.0-5c74ba04.tar.xz
-Source0:	swift3-1.0.0-5c74ba04.tar.xz
+# git config --global tar.tar.xz.command "xz -c"
+# git archive --format=tar.xz --prefix=swift3-1.0.0-%{git_rev}/ %{git_rev}
+Source0:	swift3-1.0.0-%{git_rev}.tar.xz
 
 BuildArch:	noarch
 BuildRequires:	python2-devel
@@ -20,7 +22,7 @@ The swift3 plugin permits accessing Openstack Swift via the
 Amazon S3 API.
 
 %prep
-%setup -q -n swift3-1.0.0-5c74ba04
+%setup -q -n swift3-1.0.0-%{git_rev}
 
 %build
 %{__python} setup.py build
@@ -41,6 +43,9 @@ rm -rf %{buildroot}
 %doc AUTHORS LICENSE README.md
 
 %changelog
+* Mon Sep 17 2012 Alan Pevec <apevec@redhat.com> - 1.0.0-0.20120711git
+- Pull bugfixes from upstream git.
+
 * Fri Jul 20 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.0-0.20120613git
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
