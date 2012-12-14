@@ -3,7 +3,7 @@
 Name:		openstack-swift-plugin-swift3
 Version:	1.7
 #Release:	0.20120711git%{?dist}
-Release:	1
+Release:	1%{?dist}
 Summary:	The swift3 plugin for Openstack Swift
 
 License:	ASL 2.0
