@@ -3,7 +3,7 @@
 Name:		openstack-swift-plugin-swift3
 Version:	1.7
 #Release:	0.20120711git%{?dist}
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	The swift3 plugin for Openstack Swift
 
 License:	ASL 2.0
@@ -50,6 +50,9 @@ rm -rf %{buildroot}
 %doc AUTHORS LICENSE README.md
 
 %changelog
+* Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.7-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
 * Fri Dec 14 2012 Pete Zaitcev <zaitcev@redhat.com> - 1.7-1
 - Update to upstream 1.7; keep git style as comments in the spec
 - Upstream update fixes Cyberduck
