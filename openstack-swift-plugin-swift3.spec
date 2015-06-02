@@ -1,23 +1,30 @@
-#global git_rev f216f1b4
+# echo $(git rev-parse HEAD | dd bs=8 count=1 2>/dev/null)
+%global git_rev 69f94393
+# See: Fedora Packaging, Naming Guidelines, Snapshot Packages clause.
+%global checkout .20150601git%{git_rev}
 
 Name:		openstack-swift-plugin-swift3
 Version:	1.7
-#Release:	0.20120711git%{?dist}
-Release:	4%{?dist}
+Release:	5%{?checkout}%{?dist}
 Summary:	The swift3 plugin for Openstack Swift
 
 License:	ASL 2.0
 URL:		https://github.com/fujita/swift3
 # git config --global tar.tar.xz.command "xz -c"
-# git archive --format=tar.xz --prefix=swift3-1.0.0-#{git_rev}/ #{git_rev}
-#Source0:	swift3-1.0.0-#{git_rev}.tar.xz
-# URL: https://github.com/fujita/swift3/archive/v1.7.tar.gz
-# However, github returns 302 for it. When follow redirect, it returns
-# Content-Disposition: attachment; filename=swift3-1.7.tar.gz
-Source0:	swift3-%{version}.tar.gz
+# git archive --format=tar.xz -o ../swift3-#{version}-#{git_rev}.tar.xz --prefix=swift3-#{version}-#{git_rev}/ #{git_rev}
+Source0:	swift3-%{version}-%{git_rev}.tar.xz
+
+# If we simply archive a tarball and let setup to do its job, this happens:
+#  File "/usr/lib/python2.7/site-packages/pbr/hooks/metadata.py", line 28, in hook
+#    self.config['name'], self.config.get('version', None))
+#  File "/usr/lib/python2.7/site-packages/pbr/packaging.py", line 567, in get_version
+#    raise Exception("Versioning for this project requires either an sdist"
+# Our solution is to use a fake PKG-INFO that fools pbr into behaving.
+Source1:	swift3-1.7.PKG-INFO
 
 BuildArch:	noarch
 BuildRequires:	python2-devel
+BuildRequires:	python-pbr
 BuildRequires:	python-setuptools
 
 Requires:	openstack-swift >= 1.5.0
@@ -27,8 +34,8 @@ The swift3 plugin permits accessing Openstack Swift via the
 Amazon S3 API.
 
 %prep
-#setup -q -n swift3-1.0.0-#{git_rev}
-%setup -q -n swift3-1.7
+%setup -q -n swift3-%{version}-%{git_rev}
+cp %{SOURCE1} %{_builddir}/swift3-%{version}-%{git_rev}/PKG-INFO
 
 %build
 %{__python} setup.py build
@@ -43,13 +50,17 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
+%license LICENSE
 #{python_sitelib}/#{name}-#{version}-*.egg-info/
 # Tomo posted official release 1.7 but setup.py creating 1.7.0, way to go.
 %{python_sitelib}/swift3-1.7.0-*.egg-info/
 %{python_sitelib}/swift3/
-%doc AUTHORS LICENSE README.md
+%doc AUTHORS README.md
 
 %changelog
+* Mon Jun 01 2015 Pete Zaitcev <zaitcev@redhat.com> 1.7-5.20150601git69f94393
+- Far too long without an update, go back to snapshots (#1117012)
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.7-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
