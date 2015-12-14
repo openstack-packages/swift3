@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: swift3
-Version: 1.7.0
+Version: 1.9.0
 Summary: Swift AmazonS3 API emulation Middleware
 Home-page: https://github.com/stackforge/swift3
 Author: OpenStack Foundation
